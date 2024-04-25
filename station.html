@@ -1,56 +1,76 @@
-<button  id="openPlayer" target="_blank">open player</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="openPlayer" target="_blank">open player</button>
 
-<button id="add"> add to playlist</button>
-<button id="add2"> add to playlist</button>
+<br>
+
+
 <script>
     var playerWin;
+    window.name=`wusb_${Date.now()}`
     var currentIndex = 0;
-    var song1 =   {
-      "name": "SBU Music",
+    var songs =  [ {
+      "name": "Binghamton Music",
       "artist": "WUSB",
       "album": "SBU",
-      "url": "https://stream.wusb.stonybrook.edu/content/3Wed-0300.1.mp3",
-      "cover_art_url": "https://www.suny.edu/media/suny/content-assets/images/campus-profiles/logos/binghamton.jpg"
-    }
-    var song2 =   {
-      "name": "SBU Music",
+      "url": "https://stream.wusb.stonybrook.edu/content/3Wed-0630.mp3",
+      "cover_art_url": "https://www.suny.edu/media/suny/content-assets/images/campus-profiles/logos/buffalo.jpg"
+    },  {
+      "name": "Albany Music",
       "artist": "WUSB",
       "album": "SBU",
       "url": " https://stream.wusb.stonybrook.edu/content/4Thu-0300.mp3",
       "cover_art_url": "https://images.credly.com/images/29f488de-4aa4-41f6-b575-3fe33ae46aaf/blob.png"
     }
-   
- 
+]
+songs.forEach((song)=>
+{
 
-    document.getElementById("openPlayer").onclick = function() { 
-        if (typeof(playerWin) != 'object') {
+    var button =  Object.assign(document.createElement('a'),{
+        href:`javascript:addToPlaylist(${JSON.stringify(song)})`,
+        innerHTML:song.name
+
+    })
+    document.body.append(button)
+    document.body.append(document.createElement('br'))
+})
+    
+
+function openPlayer() {
+    if (typeof(playerWin) != 'object' || playerWin.closed) {
         playerWin = window.open("player.html");
-        playerWin.postMessage(currentIndex)
-        console.log("create widnow");
-        } else {
+           playerWin.postMessage( window.name)
+           console.log("create widnow");
+    } else {
             console.log("have window");
-        }
-        
     }
-
-window.addEventListener("message", (e) => {currentIndex = e.data})
-document.getElementById("add").onclick = addToPlayList;
-function addToPlayList(){
-    if (typeof(playerWin) == 'object' && !playerWin.closed) {
-    window.localStorage.setItem("songToAdd", JSON.stringify(song1));
-    playerWin.postMessage(currentIndex);
-    } else {
-        playerWin = window.open("player.html");  
-    }
+    
 }
 
-document.getElementById("add2").onclick = addToPlayList2;
-function addToPlayList2(){
-    if (typeof(playerWin) == 'object' && !playerWin.closed) {
-    window.localStorage.setItem("songToAdd", JSON.stringify(song2));
-    playerWin.postMessage(currentIndex);
-    } else {
-        playerWin = window.open("player.html");  
+    document.getElementById("openPlayer").onclick = openPlayer;
+
+
+
+function addToPlaylist(song){
+    if (!(typeof(playerWin) == 'object' && !playerWin.closed)) {
+
+        openPlayer();
     }
+console.log("DFSDSF")
+    window.localStorage.setItem("songToAdd", JSON.stringify(song));
+    playerWin.postMessage("");
 }
+
+
+
+
+
 </script>
+</body>
+</html>
