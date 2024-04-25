@@ -2,6 +2,7 @@
 	When the bandcamp link is pressed, stop all propagation so AmplitudeJS doesn't
 	play the song.
 */
+window.onload = addSong;
 let bandcampLinks = document.getElementsByClassName('bandcamp-link');
 
 for( var i = 0; i < bandcampLinks.length; i++ ){
@@ -62,13 +63,7 @@ Amplitude.init({
         32: 'play_pause'
     },
     "songs": [
-        {
-            "name": "Risin' High (feat Raashan Ahmad)",
-            "artist": "Ancient Astronauts",
-            "album": "We Are to Answer",
-            "url": "https://521dimensions.com/song/Ancient Astronauts - Risin' High (feat Raashan Ahmad).mp3",
-            "cover_art_url": "https://cdn.mos.cms.futurecdn.net/n5kbqxzYJR6pgmxTxJUSTh.jpg"
-        }
+        
     ]
 });
 
@@ -98,13 +93,11 @@ function updateVisualEffect(songToAdd) {
 		songs[i].classList.remove('song-now-playing-icon-container');
 	}
 }
-
-
-
-window.addEventListener("message", (e)=>{ 
-    var songToAdd = JSON.parse(window.localStorage.getItem("songToAdd"));
-    Amplitude.addSong(songToAdd);
-	Amplitude.bindNewElements()
-    Amplitude.next( playlistKey = null)
-   updateVisualEffect(songToAdd);
-})
+function addSong(){
+var songToAdd = JSON.parse(window.localStorage.getItem("songToAdd"));
+Amplitude.addSong(songToAdd);
+Amplitude.bindNewElements()
+Amplitude.next( playlistKey = null)
+updateVisualEffect(songToAdd);
+}
+window.addEventListener("message", addSong)
