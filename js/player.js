@@ -113,5 +113,8 @@ function loadSongs() {
 		Amplitude.next( playlistKey = null)
 		updateVisualEffect(song);	
 	});
+	if (Amplitude.getActiveIndex() == 0) {
+		Amplitude.playSongAtIndex( 0 )
+	} 
  
 }
