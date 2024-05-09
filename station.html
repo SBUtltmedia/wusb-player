@@ -7,33 +7,46 @@
 </head>
 <body>
 
-
+<button onclick="addToPlaylist(songs2array)">add two songs</button>
 <br>
 
 
 <script>
-    var playerWin;
-    window.name=`wusb_${Date.now()}`
-    var currentIndex = 0;
-    var songs =  [ {
+
+var songs =  [ {
       "name": "Blues at Dawn",
       "artist": "Blues at Dawn",
       "album": "SBU",
       "url": "https://stream.wusb.stonybrook.edu/content/3Wed-0700.1.mp3",
-      "cover_art_url": "https://www.wusb.fm/themes/wusb/masthead.png"
+      "cover_art_url": "https://www.wusb.fm/files/uncropped%20sounds%20of%20film.jpg"
     },  {
       "name": "Indecisive",
       "artist": "Indecisive",
       "album": "SBU",
       "url": " https://stream.wusb.stonybrook.edu/content/2Tue-1400.mp3",
-      "cover_art_url": "https://www.wusb.fm/themes/wusb/masthead.png"
+      "cover_art_url": "https://www.wusb.fm/files/awaken%20the%20reaper.jpg"
     }
 ]
+
+var songs2array =  [ {
+      "name": "test12 Music",
+      "artist": "WUSB",
+      "album": "SBU",
+      "url": "https://stream.wusb.stonybrook.edu/content/3Wed-0630.mp3",
+      "cover_art_url": "https://www.wusb.fm/themes/wusb/masthead.png"
+    },  {
+      "name": "test22 Music",
+      "artist": "WUSB",
+      "album": "SBU",
+      "url": " https://stream.wusb.stonybrook.edu/content/4Thu-0300.mp3",
+      "cover_art_url": "https://www.wusb.fm/files/destinies%2041.JPG"
+    }
+]
+
 songs.forEach((song)=>
 {
-
     var button =  Object.assign(document.createElement('a'),{
-        href:`javascript:addToPlaylist(${JSON.stringify(song)})`,
+        href:`javascript:addToPlaylist(${JSON.stringify([song])})`,
         innerHTML:song.name
 
     })
@@ -42,31 +55,23 @@ songs.forEach((song)=>
 })
     
 
-function openPlayer() {
-    if (typeof(playerWin) != 'object' || playerWin.closed) {
-        playerWin = window.open("player.html");
-           playerWin.postMessage( window.name)
-           console.log("create widnow");
+function openPlayerIfNotExist() {
+    if (window.localStorage.getItem('player') != 'true') {
+        window.open("player.html");
+        console.log("create widnow");
     } else {
-            console.log("have window");
+        console.log("have window");
     }
     
 }
 
-    document.getElementById("openPlayer").onclick = openPlayer;
 
 
-
-function addToPlaylist(song){
-    if (!(typeof(playerWin) == 'object' && !playerWin.closed)) {
-
-        openPlayer();
-    }
-console.log("DFSDSF")
-    window.localStorage.setItem("songToAdd", JSON.stringify(song));
-    playerWin.postMessage("");
+function addToPlaylist(songs){
+    openPlayerIfNotExist();
+    console.log(songs)
+    window.localStorage.setItem("songs", JSON.stringify(songs));
 }
-
 
 
 

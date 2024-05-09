@@ -2,7 +2,6 @@
 	When the bandcamp link is pressed, stop all propagation so AmplitudeJS doesn't
 	play the song.
 */
-window.onload = addSong;
 let bandcampLinks = document.getElementsByClassName('bandcamp-link');
 
 for( var i = 0; i < bandcampLinks.length; i++ ){
@@ -63,7 +62,6 @@ Amplitude.init({
         32: 'play_pause'
     },
     "songs": [
-        
     ]
 });
 
@@ -93,11 +91,27 @@ function updateVisualEffect(songToAdd) {
 		songs[i].classList.remove('song-now-playing-icon-container');
 	}
 }
-function addSong(){
-var songToAdd = JSON.parse(window.localStorage.getItem("songToAdd"));
-Amplitude.addSong(songToAdd);
-Amplitude.bindNewElements()
-Amplitude.next( playlistKey = null)
-updateVisualEffect(songToAdd);
+
+window.addEventListener("load", (e)=>{
+	window.localStorage.setItem("player", true);
+	loadSongs();
+})
+
+window.addEventListener("beforeunload", (event) => {
+    window.localStorage.clear();
+});
+
+window.addEventListener("storage", loadSongs)
+
+function loadSongs() { 
+    var songsToAdd = JSON.parse(window.localStorage.getItem("songs"));
+	console.log(songsToAdd)
+	songsToAdd.forEach(song => {
+		console.log(song)
+		Amplitude.addSong(song);
+		Amplitude.bindNewElements()
+		Amplitude.next( playlistKey = null)
+		updateVisualEffect(song);	
+	});
+ 
 }
-window.addEventListener("message", addSong)
